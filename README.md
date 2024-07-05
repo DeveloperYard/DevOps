@@ -10,7 +10,7 @@ IaC를 통한 Virtual Infrastructure 구성
 - 24.07.04
   UTM을 통한 Rocky Linux 9.4 aarch64 installation(m1 silicon)
 
-## Ansible을 이용해 IaC 구축
+## Ansible을 이용해 IaC(Infrastructure as Code) 구축
 
 - 24.07.05
   WebServer provisioning, index page
