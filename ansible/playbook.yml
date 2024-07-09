@@ -1,34 +1,37 @@
-# playbook.yml
 ---
-- name: Configure Rocky Linux VM
-  hosts: rocky
+- name: Ensure Python3 is installed
+  hosts: webservers
   become: yes
   tasks:
-    - name: Update all packages
+    - name: Install Python3
       yum:
-        name: '*'
-        state: latest
+        name: python3
+        state: present
 
-    - name: Install necessary packages
+- name: Configure firewalld
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Add HTTP service to firewalld
+      firewalld:
+        service: http
+        state: enabled
+        immediate: yes
+
+    - name: Add HTTPS service to firewalld
+      firewalld:
+        service: https
+        state: enabled
+        immediate: yes
+
+- name: Essential file installation
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Install essential packages
       yum:
         name:
           - vim
           - git
           - curl
         state: present
-
-    - name: Open HTTP and HTTPS ports
-      firewalld:
-        service: http
-        permanent: yes
-        state: enabled
-
-    - name: Open SSH port
-      firewalld:
-        service: ssh
-        permanent: yes
-        state: enabled
-
-    - name: Reload firewalld
-      command: firewall-cmd --reload
-
