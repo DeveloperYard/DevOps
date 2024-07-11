@@ -14,3 +14,6 @@ IaC를 통한 Virtual Infrastructure 구성
 
 - 24.07.05
   WebServer provisioning, index page
+
+- 24.07.11
+  Todo : Serverspec을 통해 인프라 구성 도구인 Ansible test 진행
