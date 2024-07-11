@@ -1,0 +1,37 @@
+- name: Ensure Ruby is installed
+  yum:
+    name: ruby
+    state: present
+
+- name: Ensure bundler is installed
+  gem:
+    name: bundler
+    state: present
+    executable: /usr/bin/gem
+
+- name: Create Gemfile
+  copy:
+    dest: /{{ ansible_user }}/Gemfile
+    content: |
+      source 'https://rubygems.org'
+      gem 'serverspec'
+
+- name: Install gems using bundler
+  command: /usr/bin/bundle install --path vendor/bundle
+  args:
+    chdir: /{{ ansible_user }}
+
+- name: Copy spec files
+  copy:
+    src: ../spec/nginx_spec.rb
+    dest: /{{ ansible_user }}/nginx_spec.rb
+
+- name: Run Serverspec tests
+  command: /usr/bin/bundle exec rspec /{{ ansible_user }}/nginx_spec.rb
+  args:
+    chdir: /{{ ansible_user }}
+  register: result
+
+- name: Display Serverspec test results
+  debug:
+    var: result.stdout
