@@ -1,5 +1,6 @@
 require 'serverspec'
 require 'coderay'
+require 'rspec/core'
 
 # 서버와 연결 설정
 set :backend, :exec
@@ -17,14 +18,14 @@ describe "Nginx configuration" do
     it { should be_listening }
   end
 
-  # /test 경로가 제대로 설정되었는지 확인
+  # /usr/test 경로가 제대로 설정되었는지 확인
   describe file('/usr/test') do
     it { should exist }
     it { should be_directory }
   end
 end
 
-# HTML 보고서 생성
+# HTML 보고서 생성 설정
 RSpec.configure do |c|
-  c.add_formatter 'Rspec::Core::Formatters::HtmlFormatter', '/path/to/nginx_spec.html'
+  c.add_formatter 'Rspec::Core::Formatters::HtmlFormatter', '/root/serverspec_report.html'
 end
