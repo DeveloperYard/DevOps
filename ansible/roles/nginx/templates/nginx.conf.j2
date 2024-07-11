@@ -22,4 +22,16 @@ http {
     types_hash_max_size 2048;
 
     include /etc/nginx/conf.d/*.conf;
+    
+    server {
+		    listen 80 default_server;
+		    listen [::]:80 default_server;
+		    
+		    server_name _;
+		    
+		    location / {
+				    root /usr/share/nginx/html;
+				    index index.html index.htm;
+		    }
+    }
 }

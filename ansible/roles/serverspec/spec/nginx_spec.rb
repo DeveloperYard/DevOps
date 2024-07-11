@@ -1,10 +1,30 @@
 require 'serverspec'
+require 'coderay'
 
-describe service('nginx') do
-  it { should be_enabled }
-  it { should be_running }
+# 서버와 연결 설정
+set :backend, :exec
+
+# 테스트 시작
+describe "Nginx configuration" do
+  # Nginx 서비스가 실행 중인지 확인
+  describe service('nginx') do
+    it { should be_enabled }
+    it { should be_running }
+  end
+
+  # 기본 포트 80에서 Nginx가 요청을 받을 수 있는지 확인
+  describe port(80) do
+    it { should be_listening }
+  end
+
+  # /test 경로가 제대로 설정되었는지 확인
+  describe file('/usr/test') do
+    it { should exist }
+    it { should be_directory }
+  end
 end
 
-describe port(80) do
-  it { should be_listening }
+# HTML 보고서 생성
+RSpec.configure do |c|
+  c.add_formatter 'Rspec::Core::Formatters::HtmlFormatter', '/path/to/nginx_spec.html'
 end
