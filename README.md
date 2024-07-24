@@ -25,3 +25,6 @@ IaC를 통한 Virtual Infrastructure 구성
 
 - 24.07.19
   Todo : Docker Container 환경 구성, Jenkins를 활용해 CI/CD 파이프라인 구성
+
+- 24.07.24
+  Todo : Docker compose 구성, Jenkins를 이용한 CI/CD 파이프라인 구축
