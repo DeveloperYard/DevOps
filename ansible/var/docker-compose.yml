@@ -1,0 +1,24 @@
+version: '3' # 버전은 필요에 따라 적절하게 변경할 수 있습니다.
+services:
+  # database container
+  db:
+    image: mariadb
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+
+  # application container
+  app:
+    image: tomcat
+    container_name: tomcat
+    ports:
+      - "8080:8080"
+
+  # web container
+  web:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
