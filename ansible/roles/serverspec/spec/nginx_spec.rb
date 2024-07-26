@@ -27,5 +27,5 @@ end
 
 # HTML 보고서 생성 설정
 RSpec.configure do |c|
-  c.add_formatter 'Rspec::Core::Formatters::HtmlFormatter', '/root/serverspec_report.html'
+  c.add_formatter 'RSpec::Core::Formatters::HtmlFormatter', '/root/serverspec_report.html'
 end

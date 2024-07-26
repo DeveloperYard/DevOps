@@ -3,9 +3,12 @@
   yum:
     name: "{{ item }}"
     state: present
-  with_items:
+  loop:
     - ruby
     - rubygems
+    - ruby-devel
+    - gcc
+    - make
 
 - name: Create Gemfile for Serverspec
   copy:
@@ -13,12 +16,19 @@
     content: |
       source 'https://rubygems.org'
       gem 'serverspec'
-      gem 'coderay'  # 추가: HTML 출력을 위한 코드레이 gem 추가
+      gem 'coderay'
 
-- name: Install gems using bundler
-  command: /usr/bin/bundle install --path vendor/bundle
+- name: Set bundle path configuration
+  command: bundle config set path 'vendor/bundle'
   args:
     chdir: /root
+
+- name: Install gems using bundler
+  command: bundle install
+  args:
+    chdir: /root
+  become: yes
+  become_user: root
 
 - name: Create /usr/test directory
   file:
@@ -30,21 +40,33 @@
 
 - name: Copy nginx_spec.rb file
   copy:
-    src: ../spec/nginx_spec.rb # 로컬 PC에 위치한 nginx_spec.rb 파일 경로
+    src: ../spec/nginx_spec.rb
     dest: /root/nginx_spec.rb
 
 - name: Run Serverspec tests and generate HTML report
-  command: /usr/bin/bundle exec rspec --format html --out /root/serverspec_report.html /root/nginx_spec.rb
+  command: bundle exec rspec --format html --out /root/serverspec_report.html /root/nginx_spec.rb
   args:
     chdir: /root
   register: result
+  become: yes
+  become_user: root
 
 - name: Display Serverspec test results
   debug:
     var: result.stdout
 
+- name: Check if Serverspec report exists
+  stat:
+    path: /root/serverspec_report.html
+  register: st
+
+- name: Fail if Serverspec report is not found
+  fail:
+    msg: "oops! file not found"
+  when: not st.stat.exists
+
 - name: Transfer HTML report to local machine
-  fetch:
+  copy:
+    remote_src: yes
     src: /root/serverspec_report.html
-    dest: /test
-    flat: yes
+    dest: /test/serverspec_report.html
