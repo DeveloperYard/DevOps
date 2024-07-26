@@ -30,4 +30,7 @@ IaC를 통한 Virtual Infrastructure 구성
   Todo : Docker compose 구성
 
 - 24.07.25
-  Todo : Jenkins를 이용한 CI/CD 파이프라인 구축
+  Todo : serverspec 오류 수정 -> copy, remote_src 키워드 사용, flat, become 키워드 제거
+
+- 24.07.26
+  Todo : Jenkins pipeline 구축
